@@ -5,6 +5,7 @@
 * GPIO1 (TX) - Pad 2
 * GPIO2 - LED
 * GPIO3 (RX) - Pad 1
+* GPIO16 - Buzzer
 * 5V - Pad 3
 * GND - Pad 4
 

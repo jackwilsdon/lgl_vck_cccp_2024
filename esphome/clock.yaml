@@ -24,6 +24,13 @@ logger:
 ota:
   - platform: esphome
 
+switch:
+  - name: Buzzer
+    pin:
+      inverted: true
+      number: GPIO16
+    platform: gpio
+
 wifi:
   ap:
 
