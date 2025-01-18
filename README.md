@@ -1,6 +1,7 @@
 # LGL VCK CCCP 2024
 
 ## Pinout
+* ADC - Light-dependent resistor
 * GPIO0 - Left button
 * GPIO1 (TX) - Pad 2
 * GPIO2 - LED

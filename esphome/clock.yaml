@@ -24,6 +24,18 @@ logger:
 ota:
   - platform: esphome
 
+sensor:
+  - accuracy_decimals: 0
+    filters:
+      - multiply: 100
+      - round: 0
+    icon: mdi:brightness-percent
+    name: "Brightness"
+    pin: A0
+    platform: adc
+    state_class: measurement
+    unit_of_measurement: '%'
+
 switch:
   - name: Buzzer
     pin:
