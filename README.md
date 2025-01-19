@@ -9,6 +9,8 @@
 * GPIO1 (TX) - Pad 2
 * GPIO2 - LED
 * GPIO3 (RX) - Pad 1
+* GPIO4 - RX-8025 SDA
+* GPIO5 - RX-8025 SCL
 * GPIO12 - Right button (requires pull-up)
 * GPIO13 - PT6315 DIN
 * GPIO14 - PT6315 CLK
