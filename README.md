@@ -7,6 +7,9 @@
 * GPIO2 - LED
 * GPIO3 (RX) - Pad 1
 * GPIO12 - Right button (requires pull-up)
+* GPIO13 - PT6315 DIN
+* GPIO14 - PT6315 CLK
+* GPIO15 - PT6315 STB
 * GPIO16 - Buzzer
 * 5V - Pad 3
 * GND - Pad 4
