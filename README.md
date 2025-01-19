@@ -1,7 +1,16 @@
 ![Photo of LGL VCK CCCP 2024 clock](images/clock.jpg)
 
 # LGL VCK CCCP 2024
+The LGL VCK CCCP 2024 is a VFD clock powered by an ESP8285, available from AliExpress and LGL Studio.
 
+This repository contains reverse engineered information about the clock and an ESPHome configuration to allow controlling the clock from Home Assistant.
+
+## Hardware
+* DOIT ESP-M2 (ESP8285)
+* Epson RX-8025 RTC
+* PTC PT6315 VFD controller
+* Light-dependent resistor (for ambient brightness)
+* 2 buttons
 
 ## Pinout
 * ADC - Light-dependent resistor
