@@ -1,35 +1,164 @@
 api:
 
+binary_sensor:
+  - id: left_button
+    platform: gpio
+    pin:
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+      number: GPIO12
+    on_press:
+      - event.trigger:
+          id: button
+          event_type: left
+  - id: right_button
+    platform: gpio
+    pin:
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+      number: GPIO0
+    on_press:
+      - event.trigger:
+          id: button
+          event_type: right
+
 captive_portal:
+
+display:
+  - clk_pin: GPIO14
+    din_pin: GPIO13
+    id: vfd
+    lambda: |
+      ESPTime time = id(homeassistant_time).now();
+      if (id(text_override).has_state() && id(text_override).state.length() > 0) {
+        it.print(id(text_override).state.c_str());
+      } else if (time.is_valid()) {
+        // Time.
+        char text[7];
+        sprintf(text, "%2d%02d%02d", time.hour, time.minute, time.second);
+        it.print(text);
+
+        // Day.
+        uint8_t day = 0;
+        if (time.second % 2 == 0) {
+          day |= pt6315::DAY_OF_WEEK_BLANK;
+        }
+        switch (time.day_of_week) {
+          case 1:
+            day |= pt6315::DAY_OF_WEEK_SUNDAY;
+            break;
+          case 2:
+            day |= pt6315::DAY_OF_WEEK_MONDAY;
+            break;
+          case 3:
+            day |= pt6315::DAY_OF_WEEK_TUESDAY;
+            break;
+          case 4:
+            day |= pt6315::DAY_OF_WEEK_WEDNESDAY;
+            break;
+          case 5:
+            day |= pt6315::DAY_OF_WEEK_THURSDAY;
+            break;
+          case 6:
+            day |= pt6315::DAY_OF_WEEK_FRIDAY;
+            break;
+          case 7:
+            day |= pt6315::DAY_OF_WEEK_SATURDAY;
+            break;
+        }
+        it.print_day(day);
+      } else {
+        if (time.second % 2 == 0) {
+          it.print("------");
+        }
+      }
+
+      // Colon.
+      it.print_colon(id(colon_top).state, id(colon_bottom).state);
+
+      // Icons.
+      uint8_t icon = 0;
+      if (id(stars_icon).state) {
+        icon |= pt6315::ICON_STARS;
+      }
+      if (id(sunrise_icon).state) {
+        icon |= pt6315::ICON_SUNRISE;
+      }
+      if (id(g_sun_icon).state) {
+        icon |= pt6315::ICON_G_SUN;
+      }
+      if (id(moon_icon).state) {
+        icon |= pt6315::ICON_MOON;
+      }
+      it.print_icon(icon);
+
+      it.set_brightness(id(display_brightness).state);
+    platform: pt6315
+    stb_pin: GPIO15
 
 esp8266:
   board: esp8285
+  restore_from_flash: true
 
 esphome:
   friendly_name: LGL VCK CCCP 2024
-  name: lgl_vck_cccp_2024
+  name: lgl-vck-cccp-2024
   project:
     name: "LGL Studio.LGL VCK CCCP 2024"
     version: "0.0.0"
+
+event:
+  - event_types:
+      - left
+      - right
+    icon: mdi:button-pointer
+    id: button
+    name: Button
+    platform: template
+
+external_components:
+  - source:
+      path: components
+      type: local
 
 light:
   - name: LEDs
     num_leds: 7
     pin: GPIO2
     platform: neopixelbus
+    restore_mode: RESTORE_DEFAULT_OFF
     variant: SK6812
 
 logger:
+
+number:
+  - icon: mdi:brightness-percent
+    id: display_brightness
+    max_value: 7
+    min_value: 0
+    name: Display Brightness
+    on_value:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_value: true
+    step: 1
 
 ota:
   - platform: esphome
 
 sensor:
   - accuracy_decimals: 0
+    device_class: ""
     filters:
       - multiply: 100
       - round: 0
     icon: mdi:brightness-percent
+    id: brightness
     name: "Brightness"
     pin: A0
     platform: adc
@@ -37,12 +166,85 @@ sensor:
     unit_of_measurement: '%'
 
 switch:
-  - name: Buzzer
+  - icon: mdi:volume-high
+    name: Buzzer
     pin:
       inverted: true
       number: GPIO16
     platform: gpio
+  - icon: mdi:circle-multiple
+    id: colon_top
+    name: Colon Top
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:circle-multiple
+    id: colon_bottom
+    name: Colon Bottom
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:creation
+    id: stars_icon
+    name: Stars Icon
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:weather-sunset
+    id: sunrise_icon
+    name: Sunrise Icon
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:weather-sunny
+    id: g_sun_icon
+    name: G Sun Icon
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:weather-night
+    id: moon_icon
+    name: Moon Icon
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_OFF
+
+text:
+  - id: text_override
+    mode: text
+    name: Text
+    on_value:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
 
 wifi:
   ap:
-
