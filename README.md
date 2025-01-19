@@ -29,3 +29,8 @@ This repository contains reverse engineered information about the clock and an E
 * GND - Pad 4
 
 **Note**: pads are numbered 1 to 4 from left to right, with the clock face facing away from you.
+
+## Flashing
+To flash the board, connect your serial adapter to pads 1 (TX), 2 (RX) and 4 (GND) and hold the button nearest the USB-C connector whilst plugging the clock in.
+
+The provided ESPHome configuration can be found in the [esphome](esphome) directory. This includes a custom component to drive the PT6315, as this is not currently supported by ESPHome.
