@@ -1,4 +1,7 @@
+![Photo of LGL VCK CCCP 2024 clock](images/clock.jpg)
+
 # LGL VCK CCCP 2024
+
 
 ## Pinout
 * ADC - Light-dependent resistor
