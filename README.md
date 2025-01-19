@@ -2,11 +2,11 @@
 
 ## Pinout
 * ADC - Light-dependent resistor
-* GPIO0 - Left button
+* GPIO0 - Left button (requires pull-up)
 * GPIO1 (TX) - Pad 2
 * GPIO2 - LED
 * GPIO3 (RX) - Pad 1
-* GPIO12 - Right button
+* GPIO12 - Right button (requires pull-up)
 * GPIO16 - Buzzer
 * 5V - Pad 3
 * GND - Pad 4
