@@ -34,7 +34,14 @@ display:
     id: vfd
     lambda: |
       ESPTime time = id(homeassistant_time).now();
-      if (id(text_override).has_state() && id(text_override).state.length() > 0) {
+      if (captive_portal::global_captive_portal->is_active()) {
+        if (time.second % 4 < 2) {
+          it.print("setup");
+        } else {
+          // "LJ" looks like "W".
+          it.print("LJifi");
+        }
+      } else if (id(text_override).has_state() && id(text_override).state.length() > 0) {
         it.print(id(text_override).state.c_str());
       } else if (time.is_valid()) {
         // Time.
