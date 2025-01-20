@@ -46,7 +46,11 @@ display:
       } else if (time.is_valid()) {
         // Time.
         char text[7];
-        sprintf(text, "%2d%02d%02d", time.hour, time.minute, time.second);
+        if (id(show_seconds).state) {
+          sprintf(text, "%2d%02d%02d", time.hour, time.minute, time.second);
+        } else {
+          sprintf(text, "%2d%02d", time.hour, time.minute);
+        }
         it.print(text);
 
         // Day.
@@ -255,6 +259,16 @@ switch:
     optimistic: true
     platform: template
     restore_mode: RESTORE_DEFAULT_OFF
+  - icon: mdi:counter
+    id: show_seconds
+    name: Show Seconds
+    on_turn_off:
+      - component.update: vfd
+    on_turn_on:
+      - component.update: vfd
+    optimistic: true
+    platform: template
+    restore_mode: RESTORE_DEFAULT_ON
 
 text:
   - id: text_override
