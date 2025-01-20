@@ -121,9 +121,7 @@ event:
     platform: template
 
 external_components:
-  - source:
-      path: components
-      type: local
+  - source: github://jackwilsdon/lgl_vck_cccp_2024
 
 light:
   - name: LEDs
