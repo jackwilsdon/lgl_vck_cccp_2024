@@ -51,7 +51,10 @@ display:
 
         // Day.
         uint8_t day = 0;
-        if (time.second % 2 == 0) {
+        if (
+          (id(separator_mode).state == "Blink" && time.second % 2 == 0) ||
+          id(separator_mode).state == "On"
+        ) {
           day |= pt6315::DAY_OF_WEEK_BLANK;
         }
         switch (time.day_of_week) {
@@ -156,6 +159,21 @@ number:
 ota:
   - platform: esphome
 
+select:
+  - icon: mdi:dots-horizontal-circle
+    id: separator_mode
+    initial_option: "On"
+    name: Separator Mode
+    on_value:
+      - component.update: vfd
+    optimistic: true
+    options:
+      - "Off"
+      - Blink
+      - "On"
+    platform: template
+    restore_value: true
+
 sensor:
   - accuracy_decimals: 0
     device_class: ""
@@ -177,7 +195,7 @@ switch:
       inverted: true
       number: GPIO16
     platform: gpio
-  - icon: mdi:circle-multiple
+  - icon: mdi:circle
     id: colon_top
     name: Colon Top
     on_turn_off:
@@ -187,7 +205,7 @@ switch:
     optimistic: true
     platform: template
     restore_mode: RESTORE_DEFAULT_OFF
-  - icon: mdi:circle-multiple
+  - icon: mdi:circle
     id: colon_bottom
     name: Colon Bottom
     on_turn_off:
